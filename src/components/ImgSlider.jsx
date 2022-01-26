@@ -35,10 +35,11 @@ const Carousel = styled(Slider)`
     &:before{
         font-size: 10px;
         color: rgb(150, 158, 171);
+       
     }
 }
 
-    li.slick-active button::before{
+    li.slick-active button:before{
         color: white;
     }
     .slick-list{
