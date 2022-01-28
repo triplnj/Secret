@@ -6,6 +6,7 @@ function Viewers() {
     <Container>
       <Wrap>
         <img src="/images/viewers-disney.png" />
+        
       </Wrap>
       <Wrap>
         <img src="/images/viewers-pixar.png" />
@@ -20,6 +21,7 @@ function Viewers() {
         <img src="/images/viewers-national.png" />
         
       </Wrap>
+      
     </Container>
   )
 }

@@ -23,7 +23,7 @@ function Header() {
             <img src="/images/original-icon.svg" />
             <span>ORIGINALS</span>
         </a>
-        <a>
+        <a href="#">
             <img src="/images/movie-icon.svg" />
             <span>MOVIES</span>
         </a>
