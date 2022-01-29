@@ -1,39 +1,65 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from "styled-components"
+import { useParams } from 'react-router-dom';
+import db from "../firebase"
 
 function Detail() {
+  const { id } = useParams();
+  const [ movie, setMovie ] = useState();
+
+  useEffect(() => {
+    db.collection("movies")
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if(doc.exists){
+        setMovie(doc.data());
+       
+      }else{
+
+      }
+    })
+  }, [])
+
+
   return (
     <Container>
+      
+      {movie && 
+      <>
       <Background>
-        <img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/568A70A0FCFC78ECDAACF5206A6BBC677CCF1D70CA0E7AFB9DC97BEFB9F51832/scale?width=1440&aspectRatio=1.78&format=jpeg" />
-      </Background>
-      <ImageTitle>
-        <img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/55AE4EC95D846A9CF7EA97B970AD5A3A0BF2F6B8E68E631DB6D91D85A6790C2E/scale?width=1440&aspectRatio=1.78&format=png" />
-      </ImageTitle>
-      <Controls>
-        <PlayButton>
-          <img src="/images/play-icon-black.png" />
-          <span>PLAY</span>
-        </PlayButton>
-        <TrailerButton>
-          <img src="/images/play-icon-white.png" />
-          <span>Trailer</span>
-        </TrailerButton>
+      <img src={ movie.BackgroundImg } alt='something'/>
+    </Background>
+    <ImageTitle>
+      <img src= {movie.TitleImg} alt="something" />
+    </ImageTitle>
+    <Controls>
+      <PlayButton>
+        <img src="/images/play-icon-black.png" />
+        <span>PLAY</span>
+      </PlayButton>
+      <TrailerButton>
+        <img src="/images/play-icon-white.png" />
+        <span>Trailer</span>
+      </TrailerButton>
 
-        <AddButton>
-          <span>+</span>
-        </AddButton>
-        <GroupWatchButton>
-          <img src="/images/group-icon.png" />
-        </GroupWatchButton>
-        
-      </Controls>
-      <Subtitle>
-        Science Fiction, Comedy, Super Hero, Action-Adventure
-      </Subtitle>
-      <Description>
-      Scott Lang grapples with his choices as both a Super Hero and a father. As he struggles to balance his home life with his responsibilities as Ant-Man, he’s confronted with an urgent new mission and must once again put on the suit and fight alongside the Wasp.
-      </Description>
+      <AddButton>
+        <span>+</span>
+      </AddButton>
+      <GroupWatchButton>
+        <img src="/images/group-icon.png" />
+      </GroupWatchButton>
+      
+    </Controls>
+    <Subtitle>
+      { movie.Genres }
+    </Subtitle>
+    <Description>
+    { movie.Description }
+    </Description>
+      </> 
+      }
+    
     </Container>
   )
 }

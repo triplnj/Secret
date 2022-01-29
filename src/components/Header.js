@@ -1,11 +1,65 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import {auth, provider} from "../firebase"
+import { useHistory } from 'react-router-dom'
 import styled from "styled-components"
+import { setUserName, setUserPhoto, setUserLogin, setSignOut} from "../features/user/userSlice"
+import { useSelector, useDispatch} from "react-redux"
 
 function Header() {
+    const dispatch =  useDispatch();
+    const history = useHistory()
+    const userName = useSelector(setUserName);
+    const userPhoto = useSelector(setUserPhoto);
+
+    useEffect(() => {
+        auth.onAuthStateChanged( async (user) => {
+            if(user){
+                dispatch(setUserLogin ({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL
+            }))
+            history.push("/")
+
+            }
+            
+        }) 
+    })
+
+    const signIn = () => {
+        auth.signInWithPopup(provider)
+        .then((result) => {
+            let user = result.user;
+            dispatch(setUserLogin ({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL
+            }))
+            history.push("/")
+        })
+
+    }
+
+    const signOut = () => {
+        auth.signOut()
+        .then(() => {
+            dispatch(setSignOut());
+            history.push("/login");
+        })
+        
+    }
+
   return (
     <Nav>
       <Logo src="/images/logo.svg" />
-      <NavMenu>
+
+      { !userName ? 
+      <LoginContainer>
+          <Login onClick={ signIn }>Login</Login>
+      </LoginContainer>
+             :
+        <>
+        <NavMenu>
         <a>
             <img src="/images/home-icon.svg" />
             <span>HOME</span>
@@ -33,7 +87,14 @@ function Header() {
         </a>
 
       </NavMenu>
-      <UserImg src="https://lh3.googleusercontent.com/a-/AOh14GhSlF80Bboc1uyuoTF06reMeV97GeZOY0Qb8kTX-w=s360-p-rw-no"/>
+      <UserImg onClick={ signOut } 
+      src="https://lh3.googleusercontent.com/a-/AOh14GhSlF80Bboc1uyuoTF06reMeV97GeZOY0Qb8kTX-w=s360-p-rw-no"/>
+        
+        
+        </>      
+      
+      }
+      
 
 
     </Nav>
@@ -103,4 +164,27 @@ const UserImg = styled.img`
     border-radius: 50%;
     cursor: pointer;
     
+`
+const Login = styled.div`
+    border: 1px solid #f9f9f9;
+    border-radius: 4px;
+    padding: 8px 16px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background-color: rgba(0,0,0,0.6);
+    transition: all 0.2s ease 0s;
+    cursor: pointer;
+   
+   
+    
+    &:hover {
+        background-color: #f9f9f9;
+        color: #000;
+        border-color: transparent;
+    }
+`
+const LoginContainer = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 `
