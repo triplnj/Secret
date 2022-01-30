@@ -25,7 +25,7 @@ function Home() {
          
      dispatch(setMovies(tempMovies));
     })
-  }, [setMovies])
+  }, [])
     return (
     <Container>
       <ImgSlider />

@@ -7,7 +7,7 @@ import { useSelector, useDispatch} from "react-redux"
 
 function Header() {
     const dispatch =  useDispatch();
-    const history = useHistory()
+    const history = useHistory();
     const userName = useSelector(setUserName);
     const userPhoto = useSelector(setUserPhoto);
 
